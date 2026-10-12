@@ -416,7 +416,10 @@ impl AnisetteProvider for RemoteAnisetteProviderV3 {
                     client.provision(state).await?;
                     plist::to_file_xml(config_path, state)?;
                     client.get_headers(&state).await?
-                } else { panic!() }
+                } else {
+                    log::warn!("Anisette headers failed: {err:?}");
+                    return Err(err)
+                }
             },
         };
         Ok(data.get_headers())
